@@ -1,0 +1,43 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract PokemonNFT is ERC721, Ownable {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+
+    struct Pokemon {
+        string name;
+        uint256 level;
+        string elementType;  // Example: Fire, Water, Electric
+    }
+
+    mapping(uint256 => Pokemon) public pokemonCollection;
+
+    event NewPokemonMinted(address owner, uint256 tokenId, string name, uint256 level, string elementType);
+
+    constructor() ERC721("PokemonNFT", "PKMN") {}
+
+    // Function to mint a new Pokemon NFT
+    function mintPokemon(string memory _name, uint256 _level, string memory _elementType) public onlyOwner {
+        _tokenIds.increment();
+        uint256 newPokemonId = _tokenIds.current();
+
+        // Assign the new Pokemon's attributes
+        pokemonCollection[newPokemonId] = Pokemon(_name, _level, _elementType);
+
+        // Mint the NFT to the caller
+        _mint(msg.sender, newPokemonId);
+
+        emit NewPokemonMinted(msg.sender, newPokemonId, _name, _level, _elementType);
+    }
+
+    // Function to view Pokemon details by tokenId
+    function getPokemonDetails(uint256 tokenId) public view returns (string memory name, uint256 level, string memory elementType) {
+        Pokemon memory pkmn = pokemonCollection[tokenId];
+        return (pkmn.name, pkmn.level, pkmn.elementType);
+    }
+}
