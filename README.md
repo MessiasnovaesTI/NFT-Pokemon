@@ -30,7 +30,7 @@ Clone este repositório:
 
 bash
 Copiar código
-git clone https://github.com/seuusuario/PokemonNFT.git
+git clone https://github.com/MessiasnovaesTI/NFT-Pokemon.git
 Acesse o Remix IDE e crie um novo arquivo .sol.
 
 Cole o código do contrato PokemonNFT.sol no Remix IDE.
